@@ -13,7 +13,7 @@ Plain **HTML, CSS and JavaScript**: no frameworks, no build step, no dependencie
 1. You type the 4-digit code (auto-advance, backspace, arrow keys and paste all work).
 2. On **Verify**, each digit lifts out of its box and lands on a flat, tilted orbit.
 3. The digits circle the orbit **twice**, speeding up and spiralling into the centre. Digits passing the front grow and brighten, digits at the back shrink and dim, so it reads as 3D depth.
-4. A gradient ring spins while the code is checked, then turns into a **green check** with a burst of sparks, or a **red cross** with a card shake for a wrong code.
+4. A gradient ring spins while the code is checked, then turns into a **green check** with a burst of sparks, or a **red cross**, a card shake and a "Not verified" title for a wrong code. Start typing again and the card resets.
 
 ## Features
 
@@ -47,6 +47,12 @@ Copy `index.html`, `style.css` and `script.js`. The component itself has no depe
 ## Reel mode
 
 Add `?reel` to the URL and the page becomes a self-playing 1080×1920 video stage: a title, the animation driven by a scripted cursor, a code excerpt and an end card, on a loop. Open it on a phone and use the built-in screen recorder to get an Instagram reel. `?autoplay` loops the scripted demo without the frame.
+
+The scripted run tries a wrong code first ("Not verified"), then the right one ("Verified"). Options:
+
+- `?reel&ratio=4x5`: a 1080×1350 stage for Instagram carousel videos
+- `?reel&nocode`: hide the code excerpt
+- `?reel&delay=3000`: wait 3 seconds before the first run (time to start the recorder)
 
 ## Run locally
 

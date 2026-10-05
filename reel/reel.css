@@ -188,3 +188,8 @@ body.reel .toolbar { display: none; }
 
 /* Demo-only helpers (hints, live-region text) are noise in a video. */
 .reel .reel-hide, .autoplay .reel-hide, body.autoplay .toolbar { display: none !important; }
+
+/* 4:5 stage (Instagram carousel): tighter spacing, slightly smaller title */
+.reel-stage.compact { padding: 80px 60px 48px; }
+.reel-stage.compact .reel-title h1 { font-size: 92px; }
+.reel-stage.compact .reel-eyebrow { margin-bottom: 20px; }

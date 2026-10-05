@@ -1,10 +1,15 @@
 // Reel mode: open any animation with ?reel to get a 1080x1920 stage that plays itself on a loop,
 // so a plain screen recording (macOS: Cmd+Shift+5) becomes an Instagram reel.
 // Open with ?autoplay to loop the scripted demo without the reel frame.
+// Options: &ratio=4x5 for a 1080x1350 stage (Instagram carousel), &nocode to hide the code window,
+// &delay=<ms> to wait before the first loop (handy when starting a screen recording).
 
 const params = new URLSearchParams(location.search);
 export const isReel = params.has('reel');
 export const isAutoplay = isReel || params.has('autoplay');
+const STAGE = params.get('ratio') === '4x5' ? { w: 1080, h: 1350 } : { w: 1080, h: 1920 };
+const showCode = !params.has('nocode');
+const firstDelay = Number(params.get('delay') ?? 900);
 
 const HANDLE = '@arslanagayev.dev';
 const AVATAR = new URL('./avatar.png', import.meta.url).href;
@@ -64,7 +69,7 @@ function createCursor(stage) {
       target?.click();
       await sleep(250);
     },
-    park() { el.style.transform = 'translate(980px, 1500px)'; },
+    park() { el.style.transform = `translate(${STAGE.w - 100}px, ${STAGE.h - 420}px)`; },
   };
 }
 
@@ -99,14 +104,16 @@ export function mountReel({ eyebrow, title, accent, demo, file, code, play, rese
   if (isReel) {
     document.body.classList.add('reel');
     stage = document.createElement('div');
-    stage.className = 'reel-stage';
+    stage.className = `reel-stage${STAGE.h < 1920 ? ' compact' : ''}`;
+    stage.style.width = `${STAGE.w}px`;
+    stage.style.height = `${STAGE.h}px`;
     stage.innerHTML = `
       <div class="reel-title">
         <div class="reel-eyebrow">${eyebrow}</div>
         <h1>${title}<br><span>${accent}</span></h1>
       </div>
       <div class="reel-demo"></div>
-      <div class="reel-code"><header><i></i><i></i><i></i>${file}</header><pre>${highlight(code.trim())}</pre></div>
+      ${showCode ? `<div class="reel-code"><header><i></i><i></i><i></i>${file}</header><pre>${highlight(code.trim())}</pre></div>` : ''}
       <div class="reel-handle"><img src="${AVATAR}" alt="">${HANDLE}</div>
       <div class="reel-outro" aria-hidden="true">
         <img src="${AVATAR}" alt="">
@@ -122,7 +129,7 @@ export function mountReel({ eyebrow, title, accent, demo, file, code, play, rese
   const area = stage.querySelector('.reel-demo');
   const fit = () => {
     if (!isReel) return;
-    const s = Math.min(innerWidth / 1080, innerHeight / 1920);
+    const s = Math.min(innerWidth / STAGE.w, innerHeight / STAGE.h);
     stage.style.transform = `translate(-50%, -50%) scale(${s})`;
     cursor.setScale(s);
     // Scale the demo to fill the space between the title and the code window.
@@ -138,9 +145,9 @@ export function mountReel({ eyebrow, title, accent, demo, file, code, play, rese
 
   const outro = stage.querySelector('.reel-outro');
   (async () => {
-    for (;;) {
+    for (let loop = 0; ; loop++) {
       cursor.park();
-      await sleep(900);
+      await sleep(loop === 0 ? firstDelay : 900);
       await play({ cursor, sleep, typeInto, waitFor });
       if (outro) {
         await sleep(600);

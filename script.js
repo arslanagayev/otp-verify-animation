@@ -36,6 +36,7 @@ function setDigit(input, value) {
 
 inputs.forEach((input, i) => {
   input.addEventListener('input', () => {
+    if (title.classList.contains('bad')) restoreCopy();
     setDigit(input, input.value.replace(/\D/g, '').slice(-1));
     if (input.value && inputs[i + 1]) inputs[i + 1].focus();
     syncButton();
@@ -209,6 +210,9 @@ async function verify() {
   } else {
     badge.className = 'otp-badge error';
     setState('error');
+    title.classList.add('bad');
+    title.innerHTML = 'Not <span>verified</span>';
+    sub.textContent = "That code didn't match. Try again.";
     label.textContent = 'Verify code';
     status.textContent = "That code didn't match. Try again.";
     await sleep(900);
@@ -223,8 +227,15 @@ function resetInputs() {
   if (card.dataset.state !== 'success') setState('idle');
 }
 
+function restoreCopy() {
+  title.classList.remove('bad');
+  title.innerHTML = initial.title;
+  sub.innerHTML = initial.sub;
+}
+
 function reset() {
   fx.replaceChildren();
+  title.classList.remove('bad');
   setState('idle');
   resetInputs();
   title.innerHTML = initial.title;
@@ -261,11 +272,20 @@ for (let i = 0; i <= steps; i++) {
 chip.animate(frames, { duration: 1400 });`,
   reset,
   async play({ cursor, sleep, typeInto, waitFor }) {
-    await cursor.click(inputs[0]);
-    for (let i = 0; i < DEMO_CODE.length; i++) await typeInto(inputs[i], DEMO_CODE[i], 280);
-    await sleep(250);
-    await cursor.click(submit);
+    const enter = async (digits) => {
+      await cursor.click(inputs[0]);
+      for (let i = 0; i < digits.length; i++) await typeInto(inputs[i], digits[i], 260);
+      await sleep(250);
+      await cursor.click(submit);
+    };
+    // First try: a wrong code is rejected...
+    await enter('1234');
+    await waitFor(() => card.dataset.state === 'error');
+    await waitFor(() => card.dataset.state === 'idle');
+    await sleep(700);
+    // ...then the right one goes through.
+    await enter(DEMO_CODE);
     await waitFor(() => card.dataset.state === 'success');
-    await sleep(1600);
+    await sleep(1800);
   },
 });
