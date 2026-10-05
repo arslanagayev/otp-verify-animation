@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Glassy OTP verification · UI animations</title>
+  <meta name="description" content="A glass OTP input where the digits orbit into a spinner while the code is checked.">
+  <link rel="stylesheet" href="reel/theme.css">
+  <link rel="stylesheet" href="reel/reel.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="demo-page">
+    <section class="otp-card" data-state="idle" aria-labelledby="otp-title">
+      <div class="otp-fx" aria-hidden="true"></div>
+
+      <div class="otp-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/>
+          <rect x="9" y="10.5" width="6" height="5" rx="1"/>
+          <path d="M10.2 10.5V9a1.8 1.8 0 0 1 3.6 0v1.5"/>
+        </svg>
+      </div>
+
+      <h2 id="otp-title" class="otp-title">Verify it's <span>you</span></h2>
+      <p class="otp-sub">Enter the 4-digit code we sent to <b>•••• 42</b></p>
+
+      <form class="otp-form" novalidate>
+        <div class="otp-inputs" role="group" aria-label="Verification code">
+          <input class="otp-digit" inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="Digit 1 of 4">
+          <input class="otp-digit" inputmode="numeric" maxlength="1" aria-label="Digit 2 of 4">
+          <input class="otp-digit" inputmode="numeric" maxlength="1" aria-label="Digit 3 of 4">
+          <input class="otp-digit" inputmode="numeric" maxlength="1" aria-label="Digit 4 of 4">
+
+          <div class="otp-badge" aria-hidden="true">
+            <svg class="otp-check" viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9"/></svg>
+            <svg class="otp-cross" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg>
+          </div>
+        </div>
+
+        <p class="otp-resend">Didn't get it?
+          <button type="button" class="otp-resend-btn" disabled>Resend in <span class="otp-timer">0:30</span></button>
+        </p>
+
+        <button class="otp-submit" type="submit" disabled>
+          <span class="otp-spinner" aria-hidden="true"></span>
+          <span class="otp-label">Verify code</span>
+        </button>
+        <p class="otp-hint reel-hide">Demo code: <code>2026</code></p>
+      </form>
+
+      <p class="otp-status reel-hide" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <nav class="toolbar" aria-label="Demo links">
+    <a href="https://www.instagram.com/arslanagayev.dev/">More animations</a>
+    <a href="?reel">▶ Reel mode</a>
+    <a href="https://github.com/arslanagayev/otp-verify-animation">Source</a>
+  </nav>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+/* Shared look for every animation page: deep-space background, brand colours, demo layout. */
+:root {
+  --bg: #05060f;
+  --bg-2: #0b0d24;
+  --violet: #7b5cff;
+  --cyan: #00e5ff;
+  --pink: #ff5ecb;
+  --green: #22e39a;
+  --red: #ff4d6d;
+  --text: #f2f3ff;
+  --muted: #9aa0c7;
+  --glass: rgb(255 255 255 / 0.06);
+  --glass-border: rgb(255 255 255 / 0.14);
+  --font: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  font-family: var(--font);
+  color: var(--text);
+  background:
+    radial-gradient(60vmax 40vmax at 12% 18%, rgb(123 92 255 / 0.28), transparent 60%),
+    radial-gradient(50vmax 40vmax at 88% 82%, rgb(0 229 255 / 0.16), transparent 60%),
+    radial-gradient(40vmax 30vmax at 75% 5%, rgb(255 94 203 / 0.12), transparent 60%),
+    linear-gradient(160deg, var(--bg-2), var(--bg) 65%);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Normal (non-reel) mode: the component centred, with a small toolbar. */
+.demo-page {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 48px 16px 96px;
+}
+
+.toolbar {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  translate: -50% 0;
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgb(10 12 30 / 0.7);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+}
+
+.toolbar a {
+  white-space: nowrap;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+.toolbar a:hover, .toolbar a:focus-visible { background: rgb(255 255 255 / 0.08); outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

@@ -1,0 +1,190 @@
+/* Reel mode (?reel): a fixed 1080x1920 stage, scaled to fit the window, ready for screen recording. */
+body.reel { overflow: hidden; background: #000; }
+body.reel .toolbar { display: none; }
+
+.reel-stage {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 1080px;
+  height: 1920px;
+  transform-origin: center;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 110px 60px 56px;
+  background:
+    radial-gradient(900px 700px at 10% 12%, rgb(123 92 255 / 0.35), transparent 60%),
+    radial-gradient(800px 700px at 95% 88%, rgb(0 229 255 / 0.2), transparent 60%),
+    radial-gradient(600px 500px at 80% 0%, rgb(255 94 203 / 0.16), transparent 60%),
+    linear-gradient(165deg, #0d0f2b, #05060f 70%);
+}
+
+/* Faint star field drawn with layered gradients (no images to load). */
+.reel-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%, #fff9, transparent),
+    radial-gradient(1px 1px at 32% 68%, #fff7, transparent),
+    radial-gradient(1.5px 1.5px at 58% 14%, #fff8, transparent),
+    radial-gradient(1px 1px at 76% 44%, #fff6, transparent),
+    radial-gradient(1.5px 1.5px at 88% 72%, #fff8, transparent),
+    radial-gradient(1px 1px at 22% 88%, #fff6, transparent),
+    radial-gradient(1px 1px at 48% 92%, #fff5, transparent),
+    radial-gradient(1.5px 1.5px at 66% 58%, #fff6, transparent);
+  pointer-events: none;
+}
+
+.reel-title {
+  position: relative;
+  text-align: center;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.02;
+}
+
+.reel-eyebrow {
+  display: inline-block;
+  margin-bottom: 26px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid rgb(0 229 255 / 0.35);
+  background: rgb(0 229 255 / 0.08);
+  color: #8fefff;
+  font: 600 24px/1 var(--font);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.reel-title h1 { margin: 0; font-size: 104px; color: #fff; }
+
+.reel-title h1 span {
+  background: linear-gradient(90deg, #b9a8ff, #6fe9ff 55%, #ff8fdc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.reel-demo {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+}
+
+.reel-demo > * { transform: scale(var(--demo-scale, 1.55)); }
+
+/* Code window at the bottom of the reel. */
+.reel-code {
+  position: relative;
+  border-radius: 28px;
+  background: rgb(9 11 26 / 0.86);
+  border: 1px solid rgb(255 255 255 / 0.1);
+  box-shadow: 0 40px 80px rgb(0 0 0 / 0.45);
+  overflow: hidden;
+}
+
+.reel-code header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 26px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.07);
+  color: var(--muted);
+  font: 500 24px/1 var(--mono);
+}
+
+.reel-code header i { width: 16px; height: 16px; border-radius: 50%; display: inline-block; }
+.reel-code header i:nth-child(1) { background: #ff5f57; }
+.reel-code header i:nth-child(2) { background: #febc2e; }
+.reel-code header i:nth-child(3) { background: #28c840; margin-right: 10px; }
+
+.reel-code pre {
+  margin: 0;
+  padding: 26px 30px 30px;
+  font: 400 23px/1.5 var(--mono);
+  color: #d7dbff;
+  white-space: pre;
+}
+
+/* Token colours used by highlight() in reel.js */
+.tk-k { color: #c49bff; }
+.tk-s { color: #8fefb0; }
+.tk-n { color: #ffcf7a; }
+.tk-c { color: #6b7199; font-style: italic; }
+.tk-f { color: #6fe9ff; }
+.tk-p { color: #ff9ad8; }
+
+.reel-handle {
+  position: relative;
+  margin-top: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  color: #c4c8ef;
+  font: 600 30px/1 var(--font);
+}
+
+.reel-handle img { width: 52px; height: 52px; border-radius: 50%; }
+
+/* End card */
+.reel-outro {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 34px;
+  background: rgb(4 5 14 / 0.86);
+  backdrop-filter: blur(18px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  text-align: center;
+}
+
+.reel-outro.show { opacity: 1; }
+.reel-outro img { width: 220px; height: 220px; border-radius: 50%; box-shadow: 0 0 80px rgb(123 92 255 / 0.55); }
+.reel-outro strong { font-size: 64px; letter-spacing: -1px; }
+.reel-outro p { margin: 0; color: var(--muted); font-size: 34px; }
+
+/* Fake cursor used by the autoplay script */
+.reel-cursor {
+  position: absolute;
+  z-index: 50;
+  width: 44px;
+  height: 44px;
+  margin: -6px 0 0 -6px;
+  pointer-events: none;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.5));
+}
+
+.reel-cursor::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.35);
+  transform: scale(0);
+  opacity: 0;
+}
+
+.reel-cursor.press::after { animation: cursor-press 0.45s ease-out; }
+
+@keyframes cursor-press {
+  from { transform: scale(0.2); opacity: 1; }
+  to { transform: scale(1.4); opacity: 0; }
+}
+
+/* Demo-only helpers (hints, live-region text) are noise in a video. */
+.reel .reel-hide, .autoplay .reel-hide, body.autoplay .toolbar { display: none !important; }
